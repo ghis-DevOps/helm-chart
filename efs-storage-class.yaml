@@ -1,0 +1,17 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-0439578877a0ed2f6   # replaced on the fly by the command in readme.md
+  directoryPerms: "700"
+#
+#
+# Replace **your-efs-filesystem-id** with the **FileSystemId** obtained earlier. Apply this configuration:
+#
+# Apply the object in the cluster
+#
+# sed "s/your-efs-filesystem-id/$EFS_ID/" efs-storage-class.yaml | kubectl apply -f -
+# kubectl get storageclass

@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+  labels:
+    kubernetes.io/metadata.name: dev
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: create-list-pod-services
+  namespace: "dev"
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["create", "list", "delete"]
+    #  - apiGroups: ["apps"]
+    #    resources: ["deployments"]
+    #    verbs: ["create", "get", "update", "list", "delete", "watch", "patch"]
+    #  - apiGroups: ["rbac.authorization.k8s.io"]
+    #    resources: ["clusterroles", "clusterrolebindings"]
+    #    verbs: ["create", "get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: create-list-pod-services-rb
+  namespace: "dev"
+subjects:
+  - kind: ServiceAccount
+    name: dev-sa
+    namespace: dev
+roleRef:
+  kind: Role
+  name: create-list-pod-services
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dev-sa
+  namespace: "dev"
